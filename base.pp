@@ -11,36 +11,31 @@ user {'dojo':
     ensure     => absent,
 }
 
-package {'tree':
-    ensure => installed,
-    require  => Exec['apt-get update'],
+Exec {
+    path => [
+       '/usr/local/bin',
+       '/opt/local/bin',
+       '/usr/bin',
+       '/usr/sbin',
+       '/bin',
+       '/sbin'],
+    logoutput => true,
 }
-package {'git':
-    ensure => installed,
-    require  => Exec['apt-get update'],
-}
-package {'ntp':
-    ensure => installed,
-    require  => Exec['apt-get update'],
-}
-package {'wget':
-    ensure => installed,
-    require  => Exec['apt-get update'],
-}
-package {'unzip':
-    ensure => installed,
-    require  => Exec['apt-get update'],
-}
+exec {'apt-get update':}
 
-file{'/etc/motd':
+package { ['tree','git','ntp','wget','unzip']: }
+ 
+file{ '/etc/motd':
     ensure  => present,
-    content => 'Property of XYZ',
     owner   => 'root',
     group   => 'root',
-    mode    => '640',
+    mode    => '0644',
+    content => '
+        Property of XYZ
+        ',
 }
 
-service{'ntp':
+service{ 'ntp':
     ensure => running,
     enable => true,
     hasstatus => true,
