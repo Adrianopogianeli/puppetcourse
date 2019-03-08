@@ -1,7 +1,8 @@
 
-class tomcat {
+class tomcat inherits tomcat::params {
 
     notify{"checkpoint_tomcat_init":}
+    
 
     include java::install
     include tomcat::install
